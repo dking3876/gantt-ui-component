@@ -20,7 +20,12 @@
     "email": "dking3876@msn.com"
   },
   "keywords": [
-    "angular"
+    "angular",
+    "ganttchart",
+    "angular2",
+    "gantt",
+    "gantt-chart",
+    "angular component"
   ],
   "license": "MIT",
   "bugs": {
@@ -62,12 +67,12 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "dhtmlx-gantt": "^4.1.0"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "dependencies": {
-    "dhtmlx-gantt": "^4.1.0"
   }
 }

@@ -72,6 +72,7 @@ export myComponent {
         details_on_dblclick: true,
     }
 }
+```
 ## License
 
 MIT © [Deryk w. King](mailto:dking3876@msn.com)
