@@ -1,6 +1,6 @@
 {
   "name": "gantt-ui-component",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/dking3876/gantt-ui-component"
@@ -10,7 +10,12 @@
     "email": "dking3876@msn.com"
   },
   "keywords": [
-    "angular"
+    "angular",
+    "ganttchart",
+    "angular2",
+    "gantt",
+    "gantt-chart",
+    "angular component"
   ],
   "license": "MIT",
   "bugs": {
@@ -21,6 +26,7 @@
   "peerDependencies": {
     "@angular/core": "^4.0.0",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4"
+    "zone.js": "^0.8.4",
+    "dhtmlx-gantt": "^4.1.0"
   }
 }
