@@ -1,6 +1,6 @@
 {
   "name": "gantt-ui-component",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -73,6 +73,5 @@
   "engines": {
     "node": ">=6.0.0"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
