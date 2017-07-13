@@ -30,4 +30,4 @@ Desktop.ini
 
 # Build files
 dist/*
-test-app/node_modules
+test-app/node_modules/*
