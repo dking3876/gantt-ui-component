@@ -1,0 +1,103 @@
+@import "../../node_modules/dhtmlx-gantt/codebase/dhtmlxgantt";
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+:host{
+    display: block;
+    height: 300px;
+    position: relative;
+    width: 100%;
+}
+.gantt_main_header {
+    padding: 10px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-bottom: none;
+}
+.gantt_main_header:after{
+    clear:both;
+    content:"";
+    display:block;
+    
+}
+.gantt_main_header h3 {
+    display: inline-block;
+    margin-top: 5px;
+}
+.gantt_main_header .gantt_controls{
+    float:right
+}
+.gantt_main_header .gantt_controls label{
+    display:inline-block;
+}
+.gantt_main_header .gantt_controls_buttons{
+    display:inline-block;
+}
+.gantt_controls button{
+    border-radius: 5px;
+    background-color: #299CB4;
+    color: #FFFFFF;
+    border: none;
+    padding: 5px 20px;
+    margin-bottom: 10px;
+    position:relative;
+}
+.gantt_controls button:focus{
+    outline:none !important;
+}
+
+.gantt_controls button.active:before{
+    display:block;
+    content:" ";
+    position:absolute;
+    z-index:1;
+    background:rgba(0,0,0,.25);
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    border-radius:6px
+}
+.gantt_btn_set.gantt_right_btn_set.complete_button_set {
+    background-color: #9BCB64;
+    color: white;
+}
+.gantt_container{
+    height:350px;
+    min-height: 350px;
+    max-height: 500px;
+    .gantt_task_line {
+        cursor: pointer;
+    }
+    .gantt_grid_icon_indicator i{
+        line-height: 36px;
+        &.milestone_completed{
+            color:green;
+        }
+        &.milestone_overdue{
+            color:red;
+        }
+    }
+}
+.gantt_task_line{
+	transition: all .2s ease-in-out;
+}
+.gantt_task_line:hover{
+	transform:scale(1.05);
+}
+.weekend{ 
+    background: #BD7990!important; 
+    color:white !important;
+}
+.gantt_btn_set.gantt_right_btn_set.complete_button_set {
+    background-color: #9BCB64;
+    color: white;
+}
+.gantt_grid_data .gantt_row.gantt_selected, .gantt_grid_data .gantt_row.odd.gantt_selected, .gantt_task_row.gantt_selected{
+    background-color:#9BCB64;
+}
+.gantt_grid_data .gantt_row.odd:hover, .gantt_grid_data .gantt_row:hover{
+    background-color:#9bcb64;
+    cursor:pointer;
+}
+.gantt_add, .gantt_grid_head_add{
+
+}

@@ -1,0 +1,26 @@
+{
+  "name": "gantt-ui-component",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dking3876/gantt-ui-component"
+  },
+  "author": {
+    "name": "Deryk w. King",
+    "email": "dking3876@msn.com"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dking3876/gantt-ui-component/issues"
+  },
+  "module": "gantt-ui-component.js",
+  "typings": "gantt-ui-component.d.ts",
+  "peerDependencies": {
+    "@angular/core": "^4.0.0",
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
+  }
+}
