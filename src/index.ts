@@ -9,7 +9,7 @@ export * from './gantt/gantt.configuration.interface';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
   ],
   declarations: [
     GanttComponent
@@ -21,8 +21,7 @@ export * from './gantt/gantt.configuration.interface';
 export class GanttModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: GanttModule,
-      providers: []
+      ngModule: GanttModule
     };
   }
 }

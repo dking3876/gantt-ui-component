@@ -35,7 +35,7 @@ import { GanttModule } from 'gantt-ui-component';
     BrowserModule,
 
     // Specify your library as an import
-    GanttModule
+    GanttModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
@@ -43,30 +43,35 @@ import { GanttModule } from 'gantt-ui-component';
 export class AppModule { }
 ```
 
-Once your library is imported, you can use its components, directives and pipes in your Angular application:
+Once your gantt-ui-component is imported, you can add the chart to your page as follows:
 
-```xml
-<!-- You can now use your library component in app.component.html -->
-<h1>
-  {{title}}
-</h1>
-<sampleComponent></sampleComponent>
+```html
+   <gantt [tasks]="tasks" 
+          [links]="links" 
+          [config]="gantt_configuration" 
+          (TaskAction)="taskAction($event)" 
+          (TaskSelected)="taskSelected($event)" 
+          (CreateNewTask)="createNewTask($event)"
+          (LinkAction)="linkAction($event)"
+          (LinkSelected)="linkSelected($event)"></gantt>
 ```
+```typescript
+import {GanttComponent, GanttConfiguration, GanttTaskItem, GanttTaskLink,GanttEvents } from 'gantt-ui-component';
 
-## Development
 
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
+export myComponent {
+    tasks = [
+        {id: 1, title: "Task #1", start_date: "2017-06-15 00:00", end_date: "2017-07-03", progress: 0.6},
+  ];
+  links = [
 
-```bash
-$ npm run build
-```
-
-To lint all `*.ts` files:
-
-```bash
-$ npm run lint
-```
-
+  ];
+  gantt_configuration: GanttConfiguration = {
+        chartTitle: "My Great Chart",
+        heading_label: "Tasks",
+        details_on_dblclick: true,
+    }
+}
 ## License
 
 MIT © [Deryk w. King](mailto:dking3876@msn.com)
