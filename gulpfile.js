@@ -39,7 +39,7 @@ gulp.task('copy:source', function () {
  * 3. Inline template (.html) and style (.css) files into the the component .ts files.
  *    We do this on the /.tmp folder to avoid editing the original /src files
  */
-gulp.task('inline-resources', function () {
+gulp.task('inline-resources', [':sass'],function () {
   return Promise.resolve()
     .then(() => inlineResources(tmpFolder));
 });
@@ -161,7 +161,10 @@ gulp.task('copy:manifest', function () {
   return gulp.src([`${srcFolder}/package.json`])
     .pipe(gulp.dest(distFolder));
 });
-
+gulp.task('copy:styles',function(){
+  return gulp.src([`${srcFolder}/**/*.css`])
+    .pipe(gulp.dest(distFolder));
+})
 /**
  * 9. Copy README.md from / to /dist
  */
@@ -191,9 +194,9 @@ gulp.task(':sass', ()=> {
 });
 gulp.task('compile', function () {
   runSequence(
+    ':sass',
     'clean:dist',
     'copy:source',
-    ':sass',
     'inline-resources',
     'ngc',
     'rollup:fesm',
@@ -201,6 +204,7 @@ gulp.task('compile', function () {
     'copy:build',
     'copy:manifest',
     'copy:readme',
+    'copy:styles',
     'clean:build',
     'clean:tmp',
     function (err) {

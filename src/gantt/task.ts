@@ -1,7 +1,7 @@
 export class GanttTaskItem {
     id?: number|string;
-    start_date: string;
-    end_date?:string;
+    start_date: string | Date;
+    end_date?:string | Date;
     text?: string;
     progress?: number;
     duration?: number;

@@ -166,4 +166,31 @@ export interface GanttConfiguration{
      * Arrray of Custom Columns to add to the Grid layout area
      */
     custom_grid_columns?:Array<{id:string,definition:{name:string, label: string, align?:string, width:number, template:(task:any)=>string}}>;
+    /**
+     * enable/disable the ability to drag a task to change the timeline
+     * by default it is enabled :true
+     */
+    drag_move?:boolean;
+    /**
+     * enable/disable the bility to drag a task progress meter 
+     * by default it is enabled :true
+     */
+    drag_progress?:boolean;
+    /**
+     * enable/disable the ability to resize a task bar changing the start or end dates
+     * by default it is enabled :true
+     */
+    drag_resize?:boolean;
+    /**
+     * Text for the right side of the task items in the timeline area
+     */
+    rightside_text?:(start:Date, end:Date, task:Object)=>string;
+    /**
+     * Text for the left side of the task items in the timeline area
+     */
+    leftside_text?:(start:Date, end:Date, task:Object)=>string;
+    /**
+     * Text for the the completed part of the task bar
+     */
+    progress_text?:(start:Date, end:Date, task:Object)=>string;
 }

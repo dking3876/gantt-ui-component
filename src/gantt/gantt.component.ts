@@ -24,11 +24,14 @@ import { GanttConfiguration } from './gantt.configuration.interface';
             </div>
         </div>
     </div>
-    <div #gantt_here style='width: 100%; height: 100%;'></div>`,
+    <div class="containing_container">
+    <div #gantt_here class="dking_gantt" style='width: 100%; height: 100%;'></div>
+    </div>`,
     encapsulation: ViewEncapsulation.None
 })
 export class GanttComponent implements OnInit {
     @ViewChild("gantt_here") ganttContainer: ElementRef;
+
     /**
      * Gantt Object
      */
@@ -111,9 +114,14 @@ export class GanttComponent implements OnInit {
      */
     private currentDateScale;
 
-    constructor(private _renderer: Renderer, private _elementRef: ElementRef){}
+    constructor(private _renderer: Renderer, private _elementRef: ElementRef){
+        // this.gantt = Object.assign({}, gantt)
+    }
 
     ngOnInit(){
+        // console.log(gantt);
+        // this.gantt = Object.create(gantt);
+        console.log("gant init");
         //Merge the incomming configuration options with the default configuration
         Object.assign(this.config, this.userConfig);
 
@@ -133,17 +141,37 @@ export class GanttComponent implements OnInit {
                 task
             })
         });
-        
+        this.gantt.attachEvent("onBeforeTaskMove", (sid, parent,index)=>{
+            console.log("before task move", sid, parent, index);
+            console.log(Object.assign({}, this.gantt.getTask(sid)));
+        })
+        this.gantt.attachEvent("onTaskClick", (id, event)=>{ //when the event is clicked...does not apply to moving
+            console.log("before any data is changed");
+            console.log(Object.assign({}, this.gantt.getTask(id)));
+
+        })
+        this.gantt.attachEvent("onBeforeTaskDrag", (id, mode, event)=>{
+            console.log("before any data is changed");
+            console.log(Object.assign({}, this.gantt.getTask(id)));
+        })
         this.gantt.attachEvent("onBeforeTaskChanged", (id, mode, task)=>{
-            
+            this.autoShedule(id, task);
             if(mode == 'progress' && this.gantt.hasChild(id) && !this.config.independant_progress_update){
                 console.log("this task has children and can't modify its progress on its own");
                 return false;
             }
             return true;
         })
-        this.gantt.attachEvent("onAfterTaskUpdate",(id, task)=>{
+        this.gantt.attachEvent("onBeforeTaskSelected", (id)=>{
+
+        })
+        this.gantt.attachEvent("onBeforeTaskUpdate", (id, task)=>{
+
+        })
+        this.gantt.attachEvent("onAfterTaskUpdate" ,(id, task)=>{
+            console.log("after task update", task);
             this.calculateParentProgress(id);
+            this.autoShedule(id, task);
             this.TaskAction.emit({
                 action: GanttEvents.updateTask,
                 task
@@ -214,7 +242,7 @@ export class GanttComponent implements OnInit {
             }
             if(this.config.enable_custom_new_task){
                 this.CreateNewTask.emit({
-                    action: "Create new Task",
+                    action: GanttEvents.createNewTask,
                     parent: empty_task.parent,
                     auto_generated_id: empty_task.id
                 });
@@ -227,9 +255,11 @@ export class GanttComponent implements OnInit {
         this.gantt.attachEvent("onError", (error)=>{
             console.log("Gantt UI Component error: ",error);
         })
+        this.gantt.clearAll();
+        //  this.gantt.parse({data:this.tasks, links: this.taskLinks})
         Promise.all([this.tasks, this.taskLinks])
             .then(([data, links]) => {
-                gantt.parse({data, links});
+                this.gantt.parse({data, links});
             });
              
     }
@@ -333,6 +363,15 @@ export class GanttComponent implements OnInit {
                 
             return txt;
         }
+        if(this.config.leftside_text){
+            this.gantt.templates.leftside_text = this.config.leftside_text;
+        }
+        if(this.config.rightside_text){
+            this.gantt.templates.rightside_text = this.config.rightside_text;
+        }
+        if(this.config.progress_text){
+            this.gantt.templates.progress_text = this.config.progress_text;
+        }
     }
     /**
      * Setup the default lightbox option with the desired fields
@@ -395,6 +434,20 @@ export class GanttComponent implements OnInit {
         
     }
     /**
+     * Checks if the task being modified is a parent task and auto schedules the children accordingly
+     * @param id 
+     * @param task 
+     */
+    private autoShedule(id, task){
+        //if this is the parent of something, adjust all the kids automatically
+        let kids = this.gantt.getChildren(id);
+        if(kids.length === 0){
+            return;
+        }
+
+
+    }
+    /**
      * Hook to ensure the newly created Task has the title field filled out
      * @param id Id of the task being added
      * @param task Freshly created task object
@@ -418,10 +471,10 @@ export class GanttComponent implements OnInit {
      */
     public onLightboxButtonClick(button_id, el, event){
         if(button_id == "complete_button"){
-            var id = gantt.getState().lightbox;
-            gantt.getTask(id).progress = 1;
-            gantt.updateTask(id);
-            gantt.hideLightbox();
+            var id = this.gantt.getState().lightbox;
+            this.gantt.getTask(id).progress = 1;
+            this.gantt.updateTask(id);
+            this.gantt.hideLightbox();
         }
         this.config.lightbox_custom_buttons.find(btn=>{
             return btn.name == button_id
@@ -525,5 +578,11 @@ export class GanttComponent implements OnInit {
      */
     public addNewTaskLink(taskLink:GanttTaskLink){
         return this.gantt.addLink(taskLink);
+    }
+    /**
+     * Exposed method for hard refresh of the chart
+     */
+    public hardRefresh(){
+        this.gantt.render();
     }
 }

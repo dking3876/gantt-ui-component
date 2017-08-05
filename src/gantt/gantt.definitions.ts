@@ -1,4 +1,5 @@
 export enum GanttEvents {
+    createNewTask,
     newTask,
     updateTask,
     deleteTask,
