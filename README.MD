@@ -252,6 +252,8 @@ If adding custom fields you must provide those fields definitions in custom_ligh
 - Added a new entry to the GanttEvents enum "createNewTask" to replace the string "create new task" for the action of the (createNewTask) Output event
 - exposed leftside_text, rightside_text, and progress_text on the gantt configuration
 - exposed configuration to disable/enable the ability to modify tasks via the timeline interface
+- Added a method to autoschedule child tasks based on timeline changes to the parent
+- Added a configurtion flag to enable the use of autoschedule
 ## License
 
 MIT © [Deryk w. King](mailto:dking3876@msn.com)
