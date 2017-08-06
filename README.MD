@@ -220,6 +220,7 @@ If adding custom fields you must provide those fields definitions in custom_ligh
 ```
   (start:Date, end:Date, task:Object)=>string
 ```
+- auto_schedule_enable:boolean- Enable the ability for the Gantt Component to automatically reschedule all children tasks based on the timeline changes from a parent task. Disabled by default
 
 ## Date and Time definitions
 %y - the year as a two-digit number ( 00 to 99 );  
