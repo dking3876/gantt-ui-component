@@ -114,6 +114,8 @@ export class GanttComponent implements OnInit {
      */
     private currentDateScale;
 
+    private dataHold = {};
+
     constructor(private _renderer: Renderer, private _elementRef: ElementRef){
         // this.gantt = Object.assign({}, gantt)
     }
@@ -141,21 +143,25 @@ export class GanttComponent implements OnInit {
                 task
             })
         });
-        this.gantt.attachEvent("onBeforeTaskMove", (sid, parent,index)=>{
-            console.log("before task move", sid, parent, index);
-            console.log(Object.assign({}, this.gantt.getTask(sid)));
-        })
-        this.gantt.attachEvent("onTaskClick", (id, event)=>{ //when the event is clicked...does not apply to moving
-            console.log("before any data is changed");
-            console.log(Object.assign({}, this.gantt.getTask(id)));
+        // this.gantt.attachEvent("onBeforeTaskMove", (sid, parent,index)=>{
+        //     console.log("before task move", sid, parent, index);
+        //     console.log(Object.assign({}, this.gantt.getTask(sid)));
+        //     return true;
+        // })
+        this.gantt.attachEvent("onTaskClick", (id, event)=>{ //when the event is clicked...does not apply to moving access old task data
+            let tmp = Object.assign({}, this.gantt.getTask(id));
+            this.dataHold[tmp.id] = tmp;
+            console.log("save the data on task click", this.dataHold);
+            return true;
 
         })
-        this.gantt.attachEvent("onBeforeTaskDrag", (id, mode, event)=>{
-            console.log("before any data is changed");
-            console.log(Object.assign({}, this.gantt.getTask(id)));
+        this.gantt.attachEvent("onBeforeTaskDrag", (id, mode, event)=>{ //when the event is starting to move or progress move ..access old task data
+            let tmp = Object.assign({}, this.gantt.getTask(id));
+            this.dataHold[tmp.id] = tmp;
+            console.log("save the data before task draf", this.dataHold);
+            return true;
         })
         this.gantt.attachEvent("onBeforeTaskChanged", (id, mode, task)=>{
-            this.autoShedule(id, task);
             if(mode == 'progress' && this.gantt.hasChild(id) && !this.config.independant_progress_update){
                 console.log("this task has children and can't modify its progress on its own");
                 return false;
@@ -169,7 +175,6 @@ export class GanttComponent implements OnInit {
 
         })
         this.gantt.attachEvent("onAfterTaskUpdate" ,(id, task)=>{
-            console.log("after task update", task);
             this.calculateParentProgress(id);
             this.autoShedule(id, task);
             this.TaskAction.emit({
@@ -440,11 +445,40 @@ export class GanttComponent implements OnInit {
      */
     private autoShedule(id, task){
         //if this is the parent of something, adjust all the kids automatically
-        let kids = this.gantt.getChildren(id);
-        if(kids.length === 0){
+        if(!this.gantt.hasChild(id)){
             return;
         }
+        let kids = this.gantt.getChildren(id);
+        // console.log("This task has children", kids);
+        let new_parent = this.gantt.getTask(id);
+        // console.log("The data for the parent",new_parent);
+        let old_parent = this.dataHold[id];
+        // console.log("the original data for the parent", old_parent);
+        var new_duration = old_parent.duration !== new_parent.duration;
 
+        var new_start = old_parent.start_date != new_parent.start_date;
+
+        var new_end = old_parent.end_date != new_parent.end_date;
+
+        console.log("new duration " + new_duration+", new start date " + new_start + ", new end date "+ new_end );
+        if(new_start && new_end && !new_duration){ //shift in parent timeframe shift kids accordinly
+            let start_diff = new_parent.start_date - old_parent.start_date;
+            let end_diff = new_parent.end_date - old_parent.end_date;
+            console.log("start diff", start_diff, "end diff", end_diff);
+            for(let kid of kids){
+                console.log("kid ", kid)
+                let kid_task = this.gantt.getTask(kid);
+                console.log(new Date(new Date(kid_task.start_date).getTime() + start_diff));
+                kid_task.start_date = new Date(kid_task.start_date).getTime() + start_diff;
+                console.log(kid_task);
+
+            }
+        }
+        if(new_duration){ //start and/or end date has changed and the length of this phase is different
+            
+
+
+        }
 
     }
     /**

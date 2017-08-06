@@ -8,17 +8,13 @@ import {GanttComponent, GanttConfiguration, GanttTaskItem, GanttTaskLink,GanttEv
 export class AppComponent {
   title = 'Gantt Test App';
   tasks = [
-        {id: 1, title: "Task #1", start_date: "2017-06-15 00:00", end_date: "2017-07-03", progress: 0.6},
-        {id: 2, title: "Task #2", start_date: "2017-06-18 00:00", duration: 3, progress: 0.4, type: 1},
-        {id: 3, title: "Task #3", start_date: "2017-06-20 00:00", end_date: "2017-07-21", progress: 0.3},
-        {id: 4, title: "Task #4", start_date: "2017-06-18 00:00", duration: 23, progress: 0.4},
-        {id: 5, title: "Task #5", start_date: "2017-07-15 00:00", end_date: "2017-08-03"},
-        {id: 6, title: "Task #6", start_date: "2017-07-15 00:00", end_date: "2017-07-21",parent: 5},
-        {id: 7, title: "Task #7", start_date: "2017-07-22 00:00", end_date: "2017-08-03",parent: 5},
-        {id: 8, title: "Task #7", start_date: "2017-07-22 00:00", end_date: "2017-08-03"},
-        {id: 9, title: "Task #7", start_date: "2017-07-22 00:00", end_date: "2017-08-03"},
-        {id: 10, title: "Task #7", start_date: "2017-07-22 00:00", end_date: "2017-08-03"},
-        {id: 11, title: "Task #7", start_date: "2017-07-22 00:00", end_date: "2017-08-03"}
+        {id: 1, title: "Task #1", start_date: "2017-08-01 00:00", end_date: "2017-08-30", progress: 0.6},
+        {id: 2, title: "Task #2", start_date: "2017-08-18 00:00", duration: 3, progress: 0.4, type: 1},
+        {id: 3, title: "Task #3", start_date: "2017-08-20 00:00", end_date: "2017-08-21", progress: 0.3},
+        {id: 4, title: "Task #4", start_date: "2017-08-18 00:00", duration: 23, progress: 0.4},
+        {id: 5, title: "Task #5", start_date: "2017-08-15 00:00", end_date: "2017-08-30", progress: 0},
+        {id: 6, title: "Task #6", start_date: "2017-08-15 00:00", end_date: "2017-08-21",parent: 5, progress: 0},
+        {id: 7, title: "Task #7", start_date: "2017-08-21 00:00", end_date: "2017-08-30",parent: 5, progress: 0},
   ];
   links = [
 
