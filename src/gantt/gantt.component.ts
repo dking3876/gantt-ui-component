@@ -175,8 +175,9 @@ export class GanttComponent implements OnInit {
 
         })
         this.gantt.attachEvent("onAfterTaskUpdate" ,(id, task)=>{
-            this.calculateParentProgress(id);
+            
             this.autoShedule(id, task);
+            this.calculateParentProgress(id);
             this.TaskAction.emit({
                 action: GanttEvents.updateTask,
                 task
@@ -445,6 +446,7 @@ export class GanttComponent implements OnInit {
      */
     private autoShedule(id, task){
         //if this is the parent of something, adjust all the kids automatically
+        console.log(id, !this.gantt.hasChild(id))
         if(!this.gantt.hasChild(id)){
             return;
         }
@@ -465,13 +467,14 @@ export class GanttComponent implements OnInit {
             let start_diff = new_parent.start_date - old_parent.start_date;
             let end_diff = new_parent.end_date - old_parent.end_date;
             console.log("start diff", start_diff, "end diff", end_diff);
+            
             for(let kid of kids){
                 console.log("kid ", kid)
                 let kid_task = this.gantt.getTask(kid);
-                console.log(new Date(new Date(kid_task.start_date).getTime() + start_diff));
-                kid_task.start_date = new Date(kid_task.start_date).getTime() + start_diff;
-                console.log(kid_task);
-
+                let updated:any = {};
+                updated.start_date = new Date(new Date(kid_task.start_date).getTime() + start_diff);
+                updated.end_date = new Date(new Date(kid_task.end_date).getTime() + end_diff)
+                this.updateTask(kid, updated);
             }
         }
         if(new_duration){ //start and/or end date has changed and the length of this phase is different
@@ -479,7 +482,7 @@ export class GanttComponent implements OnInit {
 
 
         }
-
+        this.dataHold[id] = new_parent;
     }
     /**
      * Hook to ensure the newly created Task has the title field filled out
@@ -566,8 +569,10 @@ export class GanttComponent implements OnInit {
                 let kid_progress = this.gantt.getTask(kid_id).progress;
                 total_progress += (kid_progress / total_children);
             }
-            parent.progress = total_progress;
-            this.gantt.updateTask(parent.id);
+            if(total_progress !== parent.progress){
+                parent.progress = total_progress;
+                this.gantt.updateTask(parent.id);
+            }
         }
     }
     /**
