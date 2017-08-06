@@ -175,8 +175,9 @@ export class GanttComponent implements OnInit {
 
         })
         this.gantt.attachEvent("onAfterTaskUpdate" ,(id, task)=>{
-            
-            this.autoShedule(id, task);
+            if(this.config.auto_schedule_enable){
+                this.autoShedule(id, task);
+            }
             this.calculateParentProgress(id);
             this.TaskAction.emit({
                 action: GanttEvents.updateTask,
@@ -449,6 +450,7 @@ export class GanttComponent implements OnInit {
         if(!this.gantt.hasChild(id)){
             return;
         }
+        console.log("auto schedule engaged, schedule child tasks based on changes to the parent");
         let kids = this.gantt.getChildren(id);
         // console.log("This task has children", kids);
         let new_parent = this.gantt.getTask(id);
@@ -459,14 +461,14 @@ export class GanttComponent implements OnInit {
         var new_start = old_parent.start_date != new_parent.start_date;
         var new_end = old_parent.end_date != new_parent.end_date;
 
-        console.log("new duration " + new_duration+", new start date " + new_start + ", new end date "+ new_end );
+        // console.log("new duration " + new_duration+", new start date " + new_start + ", new end date "+ new_end );
         if(new_start && new_end && !new_duration){ //shift in parent timeframe shift kids accordingly
             // console.log(new_parent, old_parent);
             let start_diff = new_parent.start_date - old_parent.start_date;
             let end_diff = new_parent.end_date - old_parent.end_date;
             // console.log(start_diff, end_diff);
             for(let kid of kids){
-                console.log("kid ", kid)
+                
                 let kid_task = this.gantt.getTask(kid);
                 let updated:any = {};
                 updated.start_date = new Date(new Date(kid_task.start_date).getTime() + start_diff);
@@ -481,22 +483,23 @@ export class GanttComponent implements OnInit {
             let start_diff = new_parent.start_date - old_parent.start_date;
             for(let k_id of kids){
                 let kid = this.gantt.getTask(k_id);
-                console.log(kid);
+                this.dataHold[k_id] = Object.assign({}, kid);
+                
                 let updated:any = {}
-                console.log("diff ", start_diff);
+                
                 let new_kid_start = new Date(kid.start_date).getTime() + start_diff;
-                console.log(new_kid_start);
+                
                 let new_kid_end = new Date(kid.end_date).getTime() + start_diff;
                 let start_date_diff = new_kid_start - alpha;
-                console.log(start_date_diff);
+                
                 let start_ratio_diff = (start_date_diff * ratio);
-                console.log(start_ratio_diff);
+                
                 updated.start_date = new Date(new_kid_start + start_ratio_diff);
                 let end_date_diff = new_kid_end - alpha;
                 let end_ratio_diff = (end_date_diff * ratio);
 
                 updated.end_date = new Date(new_kid_end + end_ratio_diff);
-                console.log(updated);
+                
 
                 this.updateTask(k_id, updated);
             }

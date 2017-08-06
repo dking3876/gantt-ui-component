@@ -193,4 +193,10 @@ export interface GanttConfiguration{
      * Text for the the completed part of the task bar
      */
     progress_text?:(start:Date, end:Date, task:Object)=>string;
+    /**
+     * Enable the ability for the Gantt Component to automatically reschedule all children tasks
+     * based on the timeline changes from a parent task.
+     * Disabled by default
+     */
+    auto_schedule_enable?:boolean;
 }
